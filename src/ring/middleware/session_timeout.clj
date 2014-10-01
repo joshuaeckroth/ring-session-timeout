@@ -16,7 +16,7 @@
   :timeout-response - the response to send if an idle timeout occurs"
   {:arglists '([handler options])}
   [handler {:keys [timeout timeout-response timeout-handler] :or {timeout 600}}]
-  {:pre [(integer? timeout) (or (map? timeout-response) (fn? timeout-handler))]}
+  {:pre [(integer? timeout) (if (map? timeout-response) (nil? timeout-handler) (ifn? timeout-handler))]}
   (fn [request]
     (let [session  (:session request {})
           end-time (::idle-timeout session)]
