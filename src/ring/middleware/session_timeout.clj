@@ -13,7 +13,8 @@
   The following options are accepted:
 
   :timeout          - the idle timeout in seconds (default 600 seconds)
-  :timeout-response - the response to send if an idle timeout occurs"
+  :timeout-response - the response to send if an idle timeout occurs
+  :timeout-handler  - in lieu of timeout-response, provide a handler"
   {:arglists '([handler options])}
   [handler {:keys [timeout timeout-response timeout-handler] :or {timeout 600}}]
   {:pre [(integer? timeout) (if (map? timeout-response) (nil? timeout-handler) (ifn? timeout-handler))]}
@@ -39,15 +40,16 @@
   The following options are accepted:
 
   :timeout          - the absolute timeout in seconds
-  :timeout-response - the response to send if an idle timeout occurs"
+  :timeout-response - the response to send if an idle timeout occurs
+  :timeout-handler  - in lieu of timeout-response, provide a handler"
   {:arglists '([handler options])}
-  [handler {:keys [timeout timeout-response]}]
-  {:pre [(integer? timeout) (map? timeout-response)]}
+  [handler {:keys [timeout timeout-response timeout-handler]}]
+  {:pre [(integer? timeout) (if (map? timeout-response) (nil? timeout-handler) (ifn? timeout-handler))]}
   (fn [request]
     (let [session  (:session request {})
           end-time (::absolute-timeout session)]
       (if (and end-time (< end-time (current-time)))
-        (assoc timeout-response :session nil)
+        (assoc (or timeout-response (timeout-handler request)) :session nil)
         (let [response (handler request)
               session  (:session response session)]
           (if (or (nil? session) (and end-time (not (contains? response :session))))
