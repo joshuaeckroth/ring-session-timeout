@@ -1,9 +1,9 @@
-(defproject ring/ring-session-timeout "0.1.0"
+(defproject cc.artifice/ring-session-timeout "0.2.0"
   :description "Ring middleware for session timeouts"
-  :url "https://github.com/ring-clojure/ring-session-timeout"
+  :url "https://github.com/joshuaeckroth/ring-session-timeout"
   :license {:name "The MIT License"
             :url "http://opensource.org/licenses/MIT"}
-  :dependencies [[org.clojure/clojure "1.3.0"]]
+  :dependencies [[org.clojure/clojure "1.6.0"]]
   :plugins [[codox "0.8.7"]]
   :codox {:project {:name "Ring-Session-Timeout"}}
   :profiles
