@@ -1,4 +1,4 @@
-(defproject cc.artifice/ring-session-timeout "0.2.1"
+(defproject cc.artifice/ring-session-timeout "0.2.2"
   :description "Ring middleware for session timeouts"
   :url "https://github.com/joshuaeckroth/ring-session-timeout"
   :license {:name "The MIT License"

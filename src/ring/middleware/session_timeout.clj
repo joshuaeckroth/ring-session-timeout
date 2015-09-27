@@ -22,7 +22,10 @@
     (let [session  (:session request {})
           end-time (::idle-timeout session)]
       (if (and end-time (< end-time (current-time)))
-        (assoc (or timeout-response (timeout-handler request)) :session nil)
+        (assoc (or timeout-response (timeout-handler request))
+               :session (if-let [uri (:unauthorized-uri session)]
+                          {:unauthorized-uri uri}
+                          nil))
         (let [response (handler request)
               end-time (+ (current-time) timeout)
               session  (-> (:session response session)
@@ -49,7 +52,10 @@
     (let [session  (:session request {})
           end-time (::absolute-timeout session)]
       (if (and end-time (< end-time (current-time)))
-        (assoc (or timeout-response (timeout-handler request)) :session nil)
+        (assoc (or timeout-response (timeout-handler request))
+               :session (if-let [uri (:unauthorized-uri session)]
+                          {:unauthorized-uri uri}
+                          nil))
         (let [response (handler request)
               session  (:session response session)]
           (if (or (nil? session) (and end-time (not (contains? response :session))))
